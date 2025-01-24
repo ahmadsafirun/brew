@@ -644,6 +644,10 @@ upgrade *`formula`* if it is already installed but outdated.
 
 : Install but skip any post-install steps.
 
+`--skip-link`
+
+: Install but skip linking the keg into the prefix.
+
 `--bottle-arch`
 
 : Optimise bottles for the specified architecture rather than the oldest
@@ -3082,6 +3086,10 @@ to one or more of the following environment variables:
 `HOMEBREW_BUNDLE_MAS_SKIP`, `HOMEBREW_BUNDLE_WHALEBREW_SKIP`,
 `HOMEBREW_BUNDLE_TAP_SKIP`.
 
+`brew bundle upgrade`
+
+: Shorthand for `brew bundle install --upgrade`.
+
 `brew bundle dump`
 
 : Write all installed casks/formulae/images/taps into a `Brewfile` in the
@@ -3110,6 +3118,10 @@ useful for scripting.
 
 By default, only Homebrew formula dependencies are listed.
 
+`brew bundle edit`
+
+: Edit the `Brewfile` in your editor.
+
 `brew bundle exec` *`command`*
 
 : Run an external command in an isolated build environment based on the
@@ -3120,6 +3132,15 @@ sure that things you didn't specify in your `Brewfile` won't get picked up by
 commands like `bundle install`, `npm install`, etc. It will also add compiler
 flags which will help with finding keg-only dependencies like `openssl`,
 `icu4c`, etc.
+
+`brew bundle sh`
+
+: Run your shell in a `brew bundle exec` environment.
+
+`brew bundle env`
+
+: Print the environment variables that would be set in a `brew bundle exec`
+  environment.
 
 `--file`
 
@@ -3138,8 +3159,15 @@ flags which will help with finding keg-only dependencies like `openssl`,
 
 `--no-upgrade`
 
-: `install` does not run `brew upgrade` on outdated dependencies. Note they may
-  still be upgraded by `brew install` if needed.
+: `install` does not run `brew upgrade` on outdated dependencies. `check` does
+  not check for outdated dependencies. Note they may still be upgraded by `brew
+  install` if needed. This is enabled by default if `HOMEBREW_BUNDLE_NO_UPGRADE`
+  is set.
+
+`--upgrade`
+
+: `install` runs `brew upgrade` on outdated dependencies, even if
+  `HOMEBREW_BUNDLE_NO_UPGRADE` is set.
 
 `-f`, `--force`
 
@@ -3655,6 +3683,10 @@ command execution e.g. `$(cat file)`.
   
   *Default:* `https://github.com/Homebrew/brew`.
 
+`HOMEBREW_BREW_WRAPPER`
+
+: If set, use wrapper to call `brew` rather than auto-detecting it.
+
 `HOMEBREW_BROWSER`
 
 : Use this as the browser when opening project homepages.
@@ -3826,6 +3858,11 @@ command execution e.g. `$(cat file)`.
 : If set, Homebrew will refuse to read formulae or casks provided from file
   paths, e.g. `brew install ./package.rb`.
 
+`HOMEBREW_FORCE_API_AUTO_UPDATE`
+
+: If set, update the Homebrew API formula or cask data even if
+  `HOMEBREW_NO_AUTO_UPDATE` is set.
+
 `HOMEBREW_FORCE_BREWED_CA_CERTIFICATES`
 
 : If set, always use a Homebrew-installed `ca-certificates` rather than the
@@ -3840,6 +3877,11 @@ command execution e.g. `$(cat file)`.
 
 : If set, always use a Homebrew-installed `git`(1) rather than the system
   version. Automatically set if the system version of `git` is too old.
+
+`HOMEBREW_FORCE_BREW_WRAPPER`
+
+: If set, require `HOMEBREW_BREW_WRAPPER` to be set to the same value as
+  `HOMEBREW_FORCE_BREW_WRAPPER` for non-trivial `brew` commands.
 
 `HOMEBREW_FORCE_VENDOR_RUBY`
 
@@ -3993,6 +4035,10 @@ command execution e.g. `$(cat file)`.
 
 : If set, do not print any hints about changing Homebrew's behaviour with
   environment variables.
+
+`HOMEBREW_NO_FORCE_BREW_WRAPPER`
+
+: If set, disables `HOMEBREW_FORCE_BREW_WRAPPER` behaviour, even if set.
 
 `HOMEBREW_NO_GITHUB_API`
 
