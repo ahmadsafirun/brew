@@ -348,14 +348,14 @@ jobs:
           filenames=$(find Library/Homebrew/test/junit -name 'rspec*.xml' -print | tr '\n' ',')
           echo "filenames=${filenames%,}" >> "$GITHUB_OUTPUT"
 
-      - uses: codecov/test-results-action@9739113ad922ea0a9abb4b2c0f8bf6a4aa8ef820 # v1.0.1
+      - uses: codecov/test-results-action@4e79e65778be1cecd5df25e14af1eafb6df80ea9 # v1.0.2
         with:
           working-directory: ${{ steps.set-up-homebrew.outputs.repository-path }}
           files: ${{ steps.junit_xml.outputs.filenames }}
           disable_search: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      - uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
+      - uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3 # v5.3.1
         with:
           working-directory: ${{ steps.set-up-homebrew.outputs.repository-path }}
           files: Library/Homebrew/test/coverage/coverage.xml
