@@ -1342,6 +1342,7 @@ _brew_instal() {
       --screen-saverdir
       --servicedir
       --skip-cask-deps
+      --skip-link
       --skip-post-install
       --verbose
       --vst-plugindir
@@ -1405,6 +1406,7 @@ _brew_install() {
       --screen-saverdir
       --servicedir
       --skip-cask-deps
+      --skip-link
       --skip-post-install
       --verbose
       --vst-plugindir
@@ -2692,6 +2694,7 @@ _brew_update_python_resources() {
       --exclude-packages
       --extra-packages
       --help
+      --ignore-errors
       --ignore-non-pypi-packages
       --install-dependencies
       --package-name
@@ -2895,6 +2898,29 @@ _brew_vendor_install() {
   esac
 }
 
+_brew_verify() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  case "${cur}" in
+    -*)
+      __brewcomp "
+      --arch
+      --bottle-tag
+      --debug
+      --deps
+      --force
+      --help
+      --json
+      --os
+      --quiet
+      --verbose
+      "
+      return
+      ;;
+    *) ;;
+  esac
+  __brew_complete_formulae
+}
+
 _brew() {
   local i=1 cmd
 
@@ -3047,6 +3073,7 @@ _brew() {
     uses) _brew_uses ;;
     vendor-gems) _brew_vendor_gems ;;
     vendor-install) _brew_vendor_install ;;
+    verify) _brew_verify ;;
     *) ;;
   esac
 }
