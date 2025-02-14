@@ -53,6 +53,8 @@ end
 group :tests, optional: true do
   gem "parallel_tests", require: false
   gem "rspec", require: false
+  gem "rspec-core", require: false
+  gem "rspec-expectations", require: false
   gem "rspec-github", require: false
   gem "rspec_junit_formatter", require: false
   gem "rspec-retry", require: false
@@ -68,6 +70,9 @@ group :typecheck, optional: true do
 end
 group :vscode, optional: true do
   gem "ruby-lsp", require: false
+end
+group :formula_analytics, optional: true do
+  gem "pycall", require: false
 end
 
 # shared gems (used by multiple groups)
