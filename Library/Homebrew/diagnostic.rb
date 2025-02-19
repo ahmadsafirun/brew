@@ -188,11 +188,15 @@ module Homebrew
         files = Dir.chdir(dir) do
           (Dir.glob(pattern) - Dir.glob(allow_list))
             .select { |f| File.file?(f) && !File.symlink?(f) }
-            .map { |f| File.join(dir, f) }
+            .map do |f|
+              f.sub!(%r{/.*}, "/*") unless @verbose
+              File.join(dir, f)
+            end
+            .sort.uniq
         end
         return if files.empty?
 
-        inject_file_list(files.sort, message)
+        inject_file_list(files, message)
       end
 
       def check_for_stray_dylibs
@@ -1034,6 +1038,44 @@ module Homebrew
         else
           "No Cask quarantine support available: unknown reason."
         end
+      end
+
+      def non_core_taps
+        @non_core_taps ||= Tap.installed.reject(&:core_tap?).reject(&:core_cask_tap?)
+      end
+
+      def check_for_duplicate_formulae
+        return if ENV["HOMEBREW_TEST_BOT"].present?
+
+        core_formula_names = CoreTap.instance.formula_names
+        shadowed_formula_full_names = non_core_taps.flat_map do |tap|
+          tap_formula_names = tap.formula_names.map { |s| s.delete_prefix("#{tap.name}/") }
+          (core_formula_names & tap_formula_names).map { |f| "#{tap.name}/#{f}" }
+        end.compact
+        return if shadowed_formula_full_names.empty?
+
+        <<~EOS
+          The following formulae have the same name as core formulae:
+            #{shadowed_formula_full_names.join("\n  ")}
+          You will need to use their full names throughout Homebrew.
+        EOS
+      end
+
+      def check_for_duplicate_casks
+        return if ENV["HOMEBREW_TEST_BOT"].present?
+
+        core_cask_names = CoreCaskTap.instance.cask_tokens
+        shadowed_cask_full_names = non_core_taps.flat_map do |tap|
+          tap_cask_names = tap.cask_tokens.map { |s| s.delete_prefix("#{tap.name}/") }
+          (core_cask_names & tap_cask_names).map { |f| "#{tap.name}/#{f}" }
+        end.compact
+        return if shadowed_cask_full_names.empty?
+
+        <<~EOS
+          The following casks have the same name as core casks:
+            #{shadowed_cask_full_names.join("\n  ")}
+          You will need to use their full names throughout Homebrew.
+        EOS
       end
 
       def all

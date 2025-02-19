@@ -63,6 +63,7 @@ TEST_DIRECTORIES = [
   HOMEBREW_LOCKS,
   HOMEBREW_LOGS,
   HOMEBREW_TEMP,
+  HOMEBREW_ALIASES,
 ].freeze
 
 # Make `instance_double` and `class_double`
@@ -279,7 +280,6 @@ RSpec.configure do |config|
         *Keg.must_exist_subdirectories,
         HOMEBREW_LINKED_KEGS,
         HOMEBREW_PINNED_KEGS,
-        HOMEBREW_PREFIX/"var",
         HOMEBREW_PREFIX/"Caskroom",
         HOMEBREW_PREFIX/"Frameworks",
         HOMEBREW_LIBRARY/"Taps/homebrew/homebrew-cask",
